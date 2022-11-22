@@ -2,7 +2,9 @@
 
 A start up screen that allows users to set up their Sourcegraph instance from UI when launching instances from a machine image.
 
-Node.js version of https://github.com/sourcegraph/SetupWizard
+![image](https://user-images.githubusercontent.com/68532117/203432015-18fa6fc3-54f9-4a14-a831-9b8298eb2007.png)
+
+> NOTE: This is the Node.js version of https://github.com/sourcegraph/SetupWizard
 
 ## Development
 
