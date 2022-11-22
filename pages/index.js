@@ -96,7 +96,6 @@ export default function Home() {
       function checkFrontend(tries) {
         if (tries > 0) {
           fetch(`http://${hostname}:${port}/api/check`)
-            .then((res) => res.json())
             .then((res) => {
               if (res === 'Ready') {
                 teardownWizard(hostname);
@@ -108,25 +107,19 @@ export default function Home() {
               }
             })
             .catch((error) => {
+              console.error(error);
               throw error;
             });
         }
-        throw new Error(
-          'Instance set up timeout. Please contact our support for further assistance.'
-        );
       }
       // Launch as new instance or upgrade
       try {
-        fetch(
-          `http://${hostname}:${port}/api/${mode}?size=${size}&version=${version}`,
-          postRequest
-        )
-          .then((res) => res.json())
+        fetch(`http://${hostname}:${port}/api/${mode}`, postRequest)
           .then((res) => {
             checkFrontend(20);
             setSubmitted(true);
             const responseText = res.toString();
-            if (responseText.startWith('Failed')) {
+            if (responseText === 'Failed') {
               setShowErrors(res);
               setSubmitted(false);
             }
@@ -155,10 +148,10 @@ export default function Home() {
         {submitted ? (
           <div className="loading">
             <div className="settings">
-              <div class="loading-zone">
-                <span class="loading-dot"></span>
-                <span class="loading-dot"></span>
-                <span class="loading-dot"></span>
+              <div className="loading-zone">
+                <span className="loading-dot"></span>
+                <span className="loading-dot"></span>
+                <span className="loading-dot"></span>
               </div>
               <h4>Your instance is being set up...</h4>
               <h5>You will be redirected to the login page automatically.</h5>

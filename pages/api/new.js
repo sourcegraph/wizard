@@ -7,8 +7,8 @@ export default function handler(req, res) {
   if (req.method === 'GET') {
     return res.status(400).json({ Error: 'Method not allowed.' });
   }
-  const uri = new URL(req.url);
-  const size = uri.searchParams.get('size') || 'XS';
+  const queries = req.body;
+  const size = queries.size || 'XS';
   // Configure override file
   copyFileSync(
     `${home}/deploy/install/override.${size}.yaml`,

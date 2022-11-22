@@ -7,9 +7,9 @@ export default function handler(req, res) {
   if (req.method === 'GET') {
     return res.status(400).json({ Error: 'Method not allowed.' });
   }
-  const uri = new URL(req.url);
-  const size = uri.searchParams.get('size') || 'XS';
-  const version = uri.searchParams.get('version') || '';
+  const queries = req.body;
+  const size = queries.size || 'XS';
+  const version = queries.version || '';
   // Save size to root disk
   writeFile(`${home}/.sourcegraph-size`, size);
   // Save version to root disk
