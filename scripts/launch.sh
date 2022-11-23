@@ -13,6 +13,6 @@ if [ -f "$HOME/.ssh/id_rsa" ] && [ -f "$HOME/.ssh/known_hosts" ]; then
 fi
 /usr/local/bin/helm --kubeconfig /etc/rancher/k3s/k3s.yaml upgrade -i -f "$HOME/deploy/install/override.yaml" sourcegraph sourcegraph/sourcegraph
 sleep 10
-sudo cp "$HOME/.sourcegraph-size" /mnt/data/.sourcegraph-size
+sudo cp -f "$HOME/.sourcegraph-size" /mnt/data/.sourcegraph-size
 echo "Done"
 exit 0

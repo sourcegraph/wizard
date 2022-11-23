@@ -1,4 +1,5 @@
 const { copyFileSync, writeFile } = require('fs');
+const { execSync } = require('child_process');
 const os = require('os');
 const home = os.homedir();
 
@@ -15,7 +16,9 @@ export default function handler(req, res) {
     `${home}/deploy/install/override.yaml`
   );
   // Save size to root disk
-  writeFile(`${home}/.sourcegraph-size`, size);
+  writeFile(`${home}/.sourcegraph-size`, size, function (error, data) {
+    console.error(error);
+  });
   console.log('Running launch script');
   const response = execSync(`bash ${home}/wizard/scripts/launch.sh`).toString();
   if (response) {

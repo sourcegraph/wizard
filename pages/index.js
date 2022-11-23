@@ -10,6 +10,7 @@ export default function Home() {
   const [submitted, setSubmitted] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(null);
   const [showErrors, setShowErrors] = useState(null);
+  const [currentStatus, setCurrentStatus] = useState(null);
   const port = '30080';
   function teardownWizard(hostname) {
     fetch(`http://${hostname}:${port}/api/remove`)
@@ -95,8 +96,11 @@ export default function Home() {
       const postRequest = makeRequest('POST', JSON.stringify(requestBody));
       function checkFrontend(tries) {
         if (tries > 0) {
+          setCurrentStatus('Checking if frontend is ready...');
           fetch(`http://${hostname}:${port}/api/check`)
+            .then((res) => res.json())
             .then((res) => {
+              console.log(res);
               if (res === 'Ready') {
                 teardownWizard(hostname);
               } else {
@@ -116,6 +120,7 @@ export default function Home() {
       try {
         fetch(`http://${hostname}:${port}/api/${mode}`, postRequest)
           .then((res) => {
+            setCurrentStatus('Instance has been launched...');
             checkFrontend(20);
             setSubmitted(true);
             const responseText = res.toString();
@@ -154,6 +159,7 @@ export default function Home() {
                 <span className="loading-dot"></span>
               </div>
               <h4>Your instance is being set up...</h4>
+              <h4>{currentStatus}</h4>
               <h5>You will be redirected to the login page automatically.</h5>
             </div>
           </div>
