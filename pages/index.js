@@ -14,11 +14,11 @@ export default function Home() {
   const [showErrors, setShowErrors] = useState(null);
   const [currentStatus, setCurrentStatus] = useState(null);
   function teardownWizard(hostname) {
-    fetch(`http://${hostname}:${port}/api/remove`)
+    fetch(`${hostname}/api/remove`)
       .then((res) => res.json())
       .catch((error) => console.log(error));
     setTimeout(() => {
-      window.location.replace(`http://${hostname}/site-admin/init`);
+      window.location.replace(`${hostname}/site-admin/init`);
     }, '5000');
   }
 
@@ -37,7 +37,7 @@ export default function Home() {
   useEffect(() => {
     if (!hostname) {
       const uri = new URL(window.location.origin);
-      setHostname(uri.hostname);
+      setHostname(uri.origin);
       setPort(uri.port);
     }
     if (blob && fileName) {
@@ -49,7 +49,7 @@ export default function Home() {
       formData.append('fileName', fileName);
       const postRequest = makeRequest('POST', formData);
       try {
-        fetch(`http://${hostname}:${port}/api/upload`, postRequest)
+        fetch(`${hostname}/api/upload`, postRequest)
           .then((res) => res.json())
           .then((res) => {
             console.log(res);
@@ -99,7 +99,7 @@ export default function Home() {
       function checkFrontend(tries) {
         if (tries > 0) {
           setCurrentStatus('Checking if frontend is ready...');
-          fetch(`http://${hostname}:${port}/api/check`)
+          fetch(`${hostname}/api/check`)
             .then((res) => res.json())
             .then((res) => {
               console.log(res);
@@ -120,7 +120,7 @@ export default function Home() {
       }
       // Launch as new instance or upgrade
       try {
-        fetch(`http://${hostname}:${port}/api/${mode}`, postRequest)
+        fetch(`${hostname}/api/${mode}`, postRequest)
           .then((res) => {
             setCurrentStatus('Instance has been launched...');
             checkFrontend(20);
