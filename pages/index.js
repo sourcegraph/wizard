@@ -1,7 +1,9 @@
 import { useCallback, useState, useEffect } from 'react';
 import Head from 'next/head';
+
 export default function Home() {
   const [hostname, setHostname] = useState(null);
+  const [port, setPort] = useState(80);
   const [size, setSize] = useState('XS');
   const [mode, setMode] = useState('new');
   const [version, setVersion] = useState('');
@@ -11,7 +13,6 @@ export default function Home() {
   const [uploadStatus, setUploadStatus] = useState(null);
   const [showErrors, setShowErrors] = useState(null);
   const [currentStatus, setCurrentStatus] = useState(null);
-  const port = '30080';
   function teardownWizard(hostname) {
     fetch(`http://${hostname}:${port}/api/remove`)
       .then((res) => res.json())
@@ -37,6 +38,7 @@ export default function Home() {
     if (!hostname) {
       const uri = new URL(window.location.origin);
       setHostname(uri.hostname);
+      setPort(uri.port);
     }
     if (blob && fileName) {
       setUploadStatus({
