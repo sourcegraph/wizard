@@ -11,18 +11,6 @@ spec:
   clusterIP: None
   type: ClusterIP
 ---
-apiVersion: v1
-kind: Endpoints
-metadata:
-  name: wizard-ip
-subsets:
-  - addresses:
-      - ip: 10.10.0.0
-    ports:
-      - name: wizard
-        port: 30080
-        protocol: TCP
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -40,3 +28,17 @@ spec:
                 name: wizard-ip
                 port:
                   name: wizard
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: wizard-ip
+subsets:
+  - addresses:
+      # This ip is a placeholder and will be replaced by a patch during launch
+      # k3s kubectl patch endpoints wizard-ip --type merge --patch '{"subsets": [{"addresses": [{"ip": "'$(hostname -i)'"}],"ports": [{"name": "wizard","port": 30080,"protocol": "TCP"}]}]}'
+      - ip: 10.10.0.0
+    ports:
+      - name: wizard
+        port: 30080
+        protocol: TCP
