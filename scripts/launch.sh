@@ -11,7 +11,10 @@ if [ -f "$HOME/.ssh/id_rsa" ] && [ -f "$HOME/.ssh/known_hosts" ]; then
     # remove comment for sshSecret to reference the secrets in our override file
     sed -i -e 's/\#sshSecret/sshSecret/' "$HOME/deploy/install/override.yaml"
 fi
-/usr/local/bin/helm --kubeconfig /etc/rancher/k3s/k3s.yaml upgrade -i -f "$HOME/deploy/install/override.yaml" sourcegraph sourcegraph/sourcegraph
+INSTANCE_VERSION=$(cat "$HOME/.sourcegraph-version")
+[ -f /mnt/data/.sourcegraph-version ] && INSTANCE_VERSION=$(cat /mnt/data/.sourcegraph-version)
+LAUNCH_VERSION=${INSTANCE_VERSION#base}
+/usr/local/bin/helm --kubeconfig /etc/rancher/k3s/k3s.yaml upgrade -i -f "$HOME/deploy/install/override.yaml" --version "$LAUNCH_VERSION" sourcegraph sourcegraph/sourcegraph
 sleep 10
 sudo cp -f "$HOME/.sourcegraph-size" /mnt/data/.sourcegraph-size
 echo "Done"
